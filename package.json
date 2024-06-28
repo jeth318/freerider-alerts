@@ -1,0 +1,19 @@
+{
+  "name": "freerider-alerts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "express": "^4.19.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
+  }
+}
