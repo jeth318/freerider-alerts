@@ -1,12 +1,9 @@
-import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import { rides } from "./schemas";
-const client = createClient({
-  url: "file:local.db",
-});
 
-export const db = drizzle(client, {
-  schema: {
-    rides,
-  },
-});
+import { drizzle, BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
+
+const sqlite = new Database("local.db");
+
+export const db: BetterSQLite3Database = drizzle(sqlite);
