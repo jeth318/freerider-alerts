@@ -2,7 +2,7 @@ export const style = `
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: black;
+        background-color: white;
         margin: 0;
         padding: 0;
         display: flex;
@@ -43,6 +43,7 @@ export const style = `
 
     th {
         background-color: #f1ee19;
+        color: black;
         font-weight: bold;
     }
 
