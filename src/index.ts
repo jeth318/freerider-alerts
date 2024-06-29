@@ -2,8 +2,8 @@ import app from "./app";
 import { ONE_HOUR } from "./utils/general.util";
 
 const run = async () => {
-  setInterval(async () => app(), 2000);
+  console.log("Booting");
+  app() && setInterval(async () => app(), ONE_HOUR / 2);
 };
 
-//run();
-app();
+run();

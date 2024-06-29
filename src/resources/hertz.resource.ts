@@ -9,8 +9,6 @@ export const fetchLocations = async () => {
     // const response = await fetch(locationsUrl);
     // const data = await response.json();
     const data = mockLocationsData;
-    console.log(data);
-
     return data;
   } catch (error) {
     errorHandler("fetchLocations", error);
@@ -19,10 +17,9 @@ export const fetchLocations = async () => {
 
 export const fetchRides = async () => {
   try {
-    const response = await fetch(ridesUrl);
-    const data = await response.json();
-    //const data = mockRidesData;
-    //console.log(data);
+    //const response = await fetch(ridesUrl);
+    //const data = await response.json();
+    const data = mockRidesData;
     return data;
   } catch (error) {
     console.log(error);

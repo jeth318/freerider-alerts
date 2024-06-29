@@ -7,19 +7,28 @@ import { errorHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
 
 export default async () => {
+  console.log("Tick");
   try {
-    // const rides = await fetchRides();
-    const rides = mockData;
-    const subscribedRides = getRidesByPickupAndReturnCities(
+    const rides = await fetchRides();
+    const gbgSthlm = getRidesByPickupAndReturnCities(
       "göteborg",
       "stockholm",
       rides
     );
+    const sthlmGbg = getRidesByPickupAndReturnCities(
+      "stockholm",
+      "göteborg",
+      rides
+    );
 
-    if (subscribedRides?.length) {
-      const rideId = getRideId(subscribedRides[0]);
-      const { success } = await insertRide(rideId);
-      success && sendEmail(subscribedRides[0]);
+    const allMatchingRides = [...gbgSthlm, ...sthlmGbg];
+
+    if (allMatchingRides?.length) {
+      allMatchingRides.forEach(async (ride) => {
+        const rideId = getRideId(ride);
+        const { success } = await insertRide(rideId);
+        success && sendEmail(ride);
+      });
     }
   } catch (error) {
     errorHandler("run", error);

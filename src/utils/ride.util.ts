@@ -40,3 +40,8 @@ export const getRideId = (ride: TransportData) => {
 export const getRide = (ride: TransportData) => {
   return ride;
 };
+
+export const getPickupCity = (ride: TransportData) =>
+  ride.routes[0].pickupLocation.city;
+export const getReturnCity = (ride: TransportData) =>
+  ride.routes[0].returnLocation.city;
