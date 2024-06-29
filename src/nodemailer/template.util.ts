@@ -42,7 +42,7 @@ export const style = `
     }
 
     th {
-        background-color: #f7f300;
+        background-color: #f1ee19;
         font-weight: bold;
     }
 
