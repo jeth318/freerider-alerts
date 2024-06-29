@@ -1,7 +1,7 @@
-import { ridesUrl } from "./config";
 import mockLocationsData from "../dev/mock-locations-response.ts";
 import mockRidesData from "../dev/mock-rides-response.ts";
 import { errorHandler } from "../utils/error.util.ts";
+import { ridesUrl } from "./config/index.ts";
 
 export const fetchLocations = async () => {
   try {
@@ -17,10 +17,13 @@ export const fetchLocations = async () => {
 
 export const fetchRides = async () => {
   try {
-    //const response = await fetch(ridesUrl);
-    //const data = await response.json();
-    const data = mockRidesData;
-    return data;
+    if (process.env.PRODUCTION) {
+      const response = await fetch(ridesUrl);
+      return await response.json();
+    } else {
+      console.log("Using local mock data");
+      return mockRidesData;
+    }
   } catch (error) {
     console.log(error);
     errorHandler("fetchRides", error);
