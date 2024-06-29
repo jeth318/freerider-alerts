@@ -2,7 +2,6 @@ export const style = `
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: white;
         margin: 0;
         padding: 0;
         display: flex;
