@@ -1,20 +1,20 @@
 export const style = `
-  <style>
+<style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: white;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .container {
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .time-container {
@@ -29,29 +29,29 @@ export const style = `
     }
 
     table {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      border-collapse: collapse;
-      border-radius: 8px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-collapse: collapse;
     }
 
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
     }
 
     th {
-      background-color: #f2f2f2;
-      font-weight: bold;
+        background-color: #f7f300;
+        font-weight: bold;
     }
 
     td {
-      background-color: #fafafa;
+        background-color: #fafafa;
     }
 
     tr:hover td {
-      background-color: #f1f1f1;
+        background-color: #f1f1f1;
     }
-  </style>
+</style>
 `;

@@ -91,7 +91,8 @@ const buildHtml = (ride: TransportData) => {
   <br>
   <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
 </body>
-</html>`;
+</html>
+`;
 };
 
 export const sendEmail = (ride: TransportData) => {
