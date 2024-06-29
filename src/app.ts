@@ -1,4 +1,9 @@
-import { getRideId, getRidesByPickupAndReturnCities } from "./utils/ride.util";
+import {
+  getRideByPickupCity,
+  getRideId,
+  getRidesByPickupAndReturnCities,
+  getRidesByPickupCity,
+} from "./utils/ride.util";
 import { db } from "./db";
 import { insertRide, isRideKnown } from "./db/actions";
 import mockData from "./dev/mock-rides-response";
@@ -21,7 +26,10 @@ export default async () => {
       rides
     );
 
-    const allMatchingRides = [...gbgSthlm, ...sthlmGbg];
+    const gbg = getRidesByPickupCity("göteborg", rides);
+    const sthlm = getRidesByPickupCity("stockholm", rides);
+
+    const allMatchingRides = [...gbgSthlm, ...sthlmGbg, ...gbg, ...sthlm];
 
     if (allMatchingRides?.length) {
       allMatchingRides.forEach(async (ride) => {

@@ -3,15 +3,11 @@ import { TransportData } from "../models";
 import { DbRide } from "../models";
 
 export const getRidesByPickupCity = (city: string, rides: TransportData[]) => {
-  return rides.filter((ride) =>
-    ride.pickupLocationName?.toLowerCase().includes(city.toLowerCase())
-  );
+  return rides.filter((ride) => getRideByPickupCity(city, ride));
 };
 
 export const getRidesByReturnCity = (city: string, rides: TransportData[]) => {
-  return rides.filter((ride) =>
-    ride.returnLocationName?.toLowerCase().includes(city.toLowerCase())
-  );
+  return rides.filter((ride) => getRideByReturnCity(city, ride));
 };
 
 export const getRideByPickupCity = (city: string, ride: TransportData) =>
