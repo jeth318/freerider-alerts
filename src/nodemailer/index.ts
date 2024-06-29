@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { TransportData } from "../models";
-import { dynamicErrorHandler } from "../utils/error.util";
+import { errorHandler } from "../utils/error.util";
 
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -51,6 +51,6 @@ export const sendEmail = (ride: TransportData) => {
       }
     });
   } catch (error) {
-    dynamicErrorHandler("sendEmail", error);
+    errorHandler("sendEmail", error);
   }
 };

@@ -1,7 +1,7 @@
 import { ridesUrl } from "./config";
 import mockLocationsData from "../dev/mock-locations-response.ts";
 import mockRidesData from "../dev/mock-rides-response.ts";
-import { dynamicErrorHandler } from "../utils/error.util.ts";
+import { errorHandler } from "../utils/error.util.ts";
 
 export const fetchLocations = async () => {
   try {
@@ -13,7 +13,7 @@ export const fetchLocations = async () => {
 
     return data;
   } catch (error) {
-    dynamicErrorHandler("fetchLocations", error);
+    errorHandler("fetchLocations", error);
   }
 };
 
@@ -26,7 +26,7 @@ export const fetchRides = async () => {
     return data;
   } catch (error) {
     console.log(error);
-    dynamicErrorHandler("fetchRides", error);
+    errorHandler("fetchRides", error);
     return [];
   }
 };

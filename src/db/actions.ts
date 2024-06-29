@@ -1,13 +1,13 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
 import { rides } from "./schemas";
-import { dynamicErrorHandler } from "../utils/error.util";
+import { errorHandler } from "../utils/error.util";
 
 export const getStoredRideByTransportId = async (id: string) => {
   try {
     return await db.select().from(rides).where(eq(rides.hertzRideId, id));
   } catch (error) {
-    dynamicErrorHandler("getStoredRideByTransportId", error.message);
+    errorHandler("getStoredRideByTransportId", error.message);
     return Promise.reject(error);
   }
 };
@@ -21,17 +21,18 @@ export const isRideKnown = async (id: string) => {
 
     return !!result?.length;
   } catch (error) {
-    dynamicErrorHandler("isRideKnown", error.message);
+    errorHandler("isRideKnown", error);
     return Promise.reject(error);
   }
 };
 
 export const insertRide = async (hertzRideId: string) => {
   try {
-    const result = await db.insert(rides).values({ hertzRideId });
-    return result;
+    await db.insert(rides).values({ hertzRideId });
+    return { success: true };
   } catch (error) {
-    dynamicErrorHandler("insertRide", error.message);
-    return Promise.reject(error);
+    error?.code !== "SQLITE_CONSTRAINT_UNIQUE" &&
+      errorHandler("insertRide", error.message);
+    return { success: false };
   }
 };
