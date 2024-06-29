@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
 import { rides } from "./schemas";
-import { errorHandler } from "../utils/error.util";
+import { errorHandler, isDuplicateConstraint } from "../utils/error.util";
 
 export const getStoredRideByTransportId = async (id: string) => {
   try {
@@ -31,8 +31,7 @@ export const insertRide = async (hertzRideId: string) => {
     await db.insert(rides).values({ hertzRideId });
     return { success: true };
   } catch (error) {
-    error?.code !== "SQLITE_CONSTRAINT_UNIQUE" &&
-      errorHandler("insertRide", error.message);
+    !isDuplicateConstraint(error) && errorHandler("insertRide", error);
     return { success: false };
   }
 };

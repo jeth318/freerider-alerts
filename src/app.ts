@@ -27,7 +27,7 @@ export default async () => {
       allMatchingRides.forEach(async (ride) => {
         const rideId = getRideId(ride);
         const { success } = await insertRide(rideId);
-        !success && sendEmail(ride);
+        success && sendEmail(ride);
       });
     }
   } catch (error) {
