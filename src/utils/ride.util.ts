@@ -1,4 +1,6 @@
-import { TransportData } from "../../models";
+import { getStoredRideByTransportId } from "./../db/actions";
+import { TransportData } from "../models";
+import { DbRide } from "../models";
 
 export const getRidesByPickupCity = (city: string, rides: TransportData[]) => {
   return rides.filter((ride) =>
@@ -29,4 +31,12 @@ export const getRidesByPickupAndReturnCities = (
       getRideByReturnCity(returnCity, ride)
     );
   });
+};
+
+export const getRideId = (ride: TransportData) => {
+  return ride.routes[0].transportOfferId.toString();
+};
+
+export const getRide = (ride: TransportData) => {
+  return ride;
 };

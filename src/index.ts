@@ -1,6 +1,9 @@
-import mockData from "./dev/mock-rides-response";
-import { getRidesByPickupAndReturnCities } from "./resources/utils/ride.util";
+import app from "./app";
+import { ONE_HOUR } from "./utils/general.util";
 
-const a = getRidesByPickupAndReturnCities("göteborg", "stockholm", mockData);
+const run = async () => {
+  setInterval(async () => app(), 2000);
+};
 
-console.log(a);
+//run();
+app();

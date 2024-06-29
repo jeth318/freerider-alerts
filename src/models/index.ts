@@ -54,3 +54,9 @@ export type TransportData = {
   returnLocationName: string;
   routes: Route[];
 };
+
+export type DbRide = {
+  id: string;
+  textModifiers: string;
+  hertzRideId: string;
+};
