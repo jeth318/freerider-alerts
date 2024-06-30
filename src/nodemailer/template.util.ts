@@ -27,7 +27,6 @@ export const style = /*html*/ `
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: white;
         margin: 0;
         padding: 0;
         display: flex;
@@ -36,7 +35,8 @@ export const style = /*html*/ `
     }
 
     .preamble {
-      padding: 0 24px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
 
     .container {
@@ -95,13 +95,13 @@ export const style = /*html*/ `
     }
 
     .table-head {
-        background-color: #fffb00;
-        color: black;
+        background-color: #767676;
         font-weight: bold;
         width: 110px;
         display: flex;
         justify-content: left;
         align-items: center;
+        color: white;
     }
 
     .table-column{
@@ -134,10 +134,10 @@ export const buildHtml = (ride: TransportData) => {
 <body>
   <div class="container">
     <div>
-      <h1>🚗💨</h1>
+      <h1></h1>
     </div>
     <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en
-      titt på den här.</p>
+      titt på den här 🚗💨</p>
     <p>Tillgänglig mellan <b> ${printDateIntervalInfo(
       ride.routes[0].availableAt,
       ride.routes[0].expireTime
@@ -162,7 +162,7 @@ export const buildHtml = (ride: TransportData) => {
         </div>
       </div>
       <div class="table-row">
-        <div class="table-head">Tillgänglig</div>
+        <div class="table-head">När</div>
         <div class="table-column">
           <div class="flex-row-center">
             <div class="emoji">🗓️</div>
@@ -176,7 +176,7 @@ export const buildHtml = (ride: TransportData) => {
       </div>
 
       <div class="table-row">
-        <div class="table-head bottom-left-radius">Bilmodell</div>
+        <div class="table-head bottom-left-radius">Fordon</div>
         <div class="table-column bottom-right-radius">
           <div class="flex-row-center">
             <div class="emoji">🚘</div> ${printCarInfo(ride)}

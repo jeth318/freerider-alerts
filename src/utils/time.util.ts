@@ -9,9 +9,6 @@ export const getMonth = (date: string) => {
 };
 
 export const getTime = (date: string) => {
-  console.log(new Date(compensateForUTC(date)));
-  console.log(new Date(date));
-
   return new Date(compensateForUTC(date))
     .toLocaleTimeString()
     .replace(":00", "");

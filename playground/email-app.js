@@ -8,8 +8,6 @@
     return months[new Date(date).getMonth()];
   };
   var getTime = (date) => {
-    console.log(new Date(compensateForUTC(date)));
-    console.log(new Date(date));
     return new Date(compensateForUTC(date)).toLocaleTimeString().replace(":00", "");
   };
   var getWeekDay = (date) => {
@@ -67,7 +65,6 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: white;
         margin: 0;
         padding: 0;
         display: flex;
@@ -76,7 +73,8 @@
     }
 
     .preamble {
-      padding: 0 24px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
 
     .container {
@@ -135,13 +133,13 @@
     }
 
     .table-head {
-        background-color: #fffb00;
-        color: black;
+        background-color: #767676;
         font-weight: bold;
         width: 110px;
         display: flex;
         justify-content: left;
         align-items: center;
+        color: white;
     }
 
     .table-column{
@@ -176,10 +174,10 @@
 <body>
   <div class="container">
     <div>
-      <h1>\u{1F697}\u{1F4A8}</h1>
+      <h1></h1>
     </div>
     <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats p\xE5 Hertz Freerider. Ta en
-      titt p\xE5 den h\xE4r.</p>
+      titt p\xE5 den h\xE4r \u{1F697}\u{1F4A8}</p>
     <p>Tillg\xE4nglig mellan <b> ${printDateIntervalInfo(
         ride.routes[0].availableAt,
         ride.routes[0].expireTime
@@ -204,7 +202,7 @@
         </div>
       </div>
       <div class="table-row">
-        <div class="table-head">Tillg\xE4nglig</div>
+        <div class="table-head">N\xE4r</div>
         <div class="table-column">
           <div class="flex-row-center">
             <div class="emoji">\u{1F5D3}\uFE0F</div>
@@ -218,7 +216,7 @@
       </div>
 
       <div class="table-row">
-        <div class="table-head bottom-left-radius">Bilmodell</div>
+        <div class="table-head bottom-left-radius">Fordon</div>
         <div class="table-column bottom-right-radius">
           <div class="flex-row-center">
             <div class="emoji">\u{1F698}</div> ${printCarInfo(ride)}
