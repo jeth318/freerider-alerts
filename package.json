@@ -8,6 +8,9 @@
   },
   "scripts": {
     "build": "esbuild src/index.ts --entry-names='app' --bundle --platform=node --target=node10.4 --outdir=dist",
+    "dev:email": "npm-run-all --parallel email-mock email-mock-server",
+    "email-mock": "esbuild src/dev/email-app.ts --entry-names='email-app' --bundle --platform=browser --target=node10.4 --outdir=playground --watch",
+    "email-mock-server": "nodemon src/dev/test-server.js",
     "deploy": "npm run build && sh ./deploy.sh",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
@@ -23,6 +26,7 @@
     "esbuild": "^0.21.5",
     "esbuild-plugin-tsc": "^0.4.0",
     "express": "^4.19.2",
+    "npm-run-all": "^4.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.2"
   },

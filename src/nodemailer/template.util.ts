@@ -57,7 +57,7 @@ export const style = `
     }
 
     th {
-        background-color: #f1ee19;
+        background-color: #fffb00;
         color: black;
         font-weight: bold;
     }
