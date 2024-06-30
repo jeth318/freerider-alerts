@@ -31,9 +31,13 @@ export const style = /*html*/ `
         align-items: center;
     }
 
-    .preamble {
+    .preamble-container {
       padding-left: 24px;
       padding-right: 24px;
+    }
+
+    .preamble {
+      max-width: 450px;
     }
 
     .container {
@@ -121,6 +125,9 @@ export const style = /*html*/ `
     .emoji {
       margin-right: 10px;
     }
+    .text-center {
+      text-align: center;
+    }
 </style>
 `;
 
@@ -137,12 +144,16 @@ export const buildHtml = (ride: TransportData) => {
     <div>
       <h1></h1>
     </div>
-    <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en
+    <div class="preamble-container">
+      <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en
       titt på den här 🚗💨</p>
-    <p>Tillgänglig mellan <b> ${printDateIntervalInfo(
-      ride.routes[0].availableAt,
-      ride.routes[0].expireTime
-    )}</b></p>
+      <p class="text-center"><b> ${printDateIntervalInfo(
+        ride.routes[0].availableAt,
+        ride.routes[0].expireTime
+      )}</b>
+      </p>
+    </div>
+    
     <div class="table-grid">
       <div class="table-row">
         <div class="table-head top-left-radius">Hämtas</div>
