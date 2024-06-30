@@ -7,14 +7,14 @@
     "node": ">=18.0.0 <19.0.0"
   },
   "scripts": {
+    "dev": "nodemon src/index.ts",
     "serve": "npm-run-all build start",
     "build": "esbuild src/index.ts --entry-names='app' --bundle --platform=node --target=node10.4 --minify --outdir=dist",
-    "email-preview": "npm-run-all --parallel email-mock email-mock-server",
+    "deploy": "npm run build && sh ./deploy.sh",
     "email-mock": "esbuild src/dev/email-preview/preview.app.ts --entry-names='preview.bundle' --bundle --platform=browser --target=node10.4 --outdir=src/dev/email-preview --watch",
     "email-mock-server": "nodemon src/dev/email-preview/server.ts",
-    "deploy": "npm run build && sh ./deploy.sh",
+    "email-preview": "npm-run-all --parallel email-mock email-mock-server",
     "start": "node dist/app.js",
-    "dev": "nodemon src/index.ts",
     "drizzle:gen": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push"
   },
