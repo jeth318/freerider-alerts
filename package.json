@@ -2,9 +2,13 @@
   "name": "freerider-alerts",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "npm": ">=10.0.0 <11.0.0",
+    "node": ">=18.0.0 <19.0.0"
+  },
   "scripts": {
-    "bundle": "esbuild ./src/index.ts --bundle --platform=node --target=node10.4",
-    "build": "npx tsc --skipLibCheck",
+    "build": "esbuild src/index.ts --entry-names='app' --bundle --platform=node --target=node10.4 --outdir=dist",
+    "deploy": "npm run build && sh ./deploy.sh",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "drizzle:gen": "drizzle-kit generate",
