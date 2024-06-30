@@ -1,16 +1,65 @@
 (() => {
-  // src/utils/general.util.ts
+  // src/utils/time.util.ts
   var ONE_HOUR = 1e3 * 3600;
-  var getDate = (date) => new Date(date).toLocaleDateString("sv");
-  var getTime = (date) => new Date(date).toLocaleTimeString("sv");
+  var getDay = (date) => {
+    return new Date(date).getDay();
+  };
+  var getMonth = (date) => {
+    return months[new Date(date).getMonth()];
+  };
+  var getTime = (date) => {
+    console.log(new Date(compensateForUTC(date)));
+    console.log(new Date(date));
+    return new Date(compensateForUTC(date)).toLocaleTimeString().replace(":00", "");
+  };
+  var getWeekDay = (date) => {
+    return weekdays[new Date(date).getDay()];
+  };
+  var compensateForUTC = (originalDate) => {
+    const date = /* @__PURE__ */ new Date(originalDate + "Z");
+    date.setHours(date.getHours() + 2);
+    return date.toISOString().slice(0, 19);
+  };
+  var weekdays = [
+    "m\xE5ndag",
+    "tisdag",
+    "onsdag",
+    "torsdag",
+    "fredag",
+    "l\xF6rdag",
+    "s\xF6ndag"
+  ];
+  var months = [
+    "januari",
+    "februari",
+    "mars",
+    "april",
+    "maj",
+    "juni",
+    "juli",
+    "augusti",
+    "september",
+    "oktober",
+    "november",
+    "december"
+  ];
 
   // src/nodemailer/template.util.ts
-  var printPickupInfo = (ride) => `${getDate(ride.routes[0].availableAt)} - ${getTime(
-    ride.routes[0].availableAt
-  )}`;
-  var printReturnInfo = (ride) => `${getDate(ride.routes[0].expireTime)} - ${getTime(
-    ride.routes[0].expireTime
-  )}`;
+  var printDateInfo = (date) => {
+    const day = getDay(date);
+    const month = getMonth(date);
+    const time = getTime(date);
+    return `${day} ${month} ${time}`;
+  };
+  var printDateIntervalInfo = (pickupDate, returnDate) => {
+    const dayPickup = getDay(pickupDate);
+    const monthPickup = getMonth(pickupDate);
+    const dayReturn = getDay(returnDate);
+    const monthReturn = getMonth(returnDate);
+    return `${getWeekDay(pickupDate)} ${dayPickup} ${monthPickup} - ${getWeekDay(
+      returnDate
+    )} ${dayReturn} ${monthReturn} `;
+  };
   var printCarInfo = (ride) => ride.routes[0].carModel;
   var style = (
     /*html*/
@@ -27,7 +76,7 @@
     }
 
     .preamble {
-      padding: 24px;
+      padding: 0 24px;
     }
 
     .container {
@@ -89,7 +138,7 @@
         background-color: #fffb00;
         color: black;
         font-weight: bold;
-        min-width: 50px;
+        width: 110px;
         display: flex;
         justify-content: left;
         align-items: center;
@@ -117,62 +166,72 @@
   var buildHtml = (ride) => {
     const doc = (
       /*html*/
-      `<html>
-  <head>
-    ${style}
-  </head>
-  <body>
-    <div class="container">
-      <div>
-        <h1>\u{1F697}\u{1F4A8}</h1>
-      </div> 
-       <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats p\xE5 Hertz Freerider. Ta en titt p\xE5 den h\xE4r.</p>
-      <div class="table-grid">
-        <div class="table-row">
-          <div class="table-head">Pickup</div>
-          <div class="table-column">
-            <div class="flex-row-center">
-              <div class="emoji">\u27A1\uFE0F</div><div>${ride.pickupLocationName}</div>
-            </div>
+      `
+  <html>
+
+<head>
+  ${style}
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <h1>\u{1F697}\u{1F4A8}</h1>
+    </div>
+    <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats p\xE5 Hertz Freerider. Ta en
+      titt p\xE5 den h\xE4r.</p>
+    <p>Tillg\xE4nglig mellan <b> ${printDateIntervalInfo(
+        ride.routes[0].availableAt,
+        ride.routes[0].expireTime
+      )}</b></p>
+    <div class="table-grid">
+      <div class="table-row">
+        <div class="table-head top-left-radius">H\xE4mtas</div>
+        <div class="table-column top-right-radius">
+          <div class="flex-row-center">
+            <div class="emoji">\u27A1\uFE0F</div>
+            <div>${ride.pickupLocationName}</div>
           </div>
         </div>
-        <div class="table-row">
-          <div class="table-head">Return</div>
-          <div class="table-column">
-            <div class="flex-row-center">
-              <div class="emoji">\u2B05\uFE0F</div><div>${ride.returnLocationName}</div>
-            </div>
+      </div>
+      <div class="table-row">
+        <div class="table-head">L\xE4mnas</div>
+        <div class="table-column">
+          <div class="flex-row-center">
+            <div class="emoji">\u2B05\uFE0F</div>
+            <div>${ride.returnLocationName}</div>
           </div>
         </div>
-        <div class="table-row">
-          <div class="table-head">When</div>
-          <div class="table-column">
-          <div class="time-container">
-          <div class="hourglass-container">\u231B</div>
+      </div>
+      <div class="table-row">
+        <div class="table-head">Tillg\xE4nglig</div>
+        <div class="table-column">
+          <div class="flex-row-center">
+            <div class="emoji">\u{1F5D3}\uFE0F</div>
             <div>
-              <div>
-          ${printPickupInfo(ride)}
-              </div>
-              <div>
-            ${printReturnInfo(ride)}
+              ${printDateInfo(ride.routes[0].availableAt)} och ${printDateInfo(
+        ride.routes[0].expireTime
+      )}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="table-row">
+        <div class="table-head bottom-left-radius">Bilmodell</div>
+        <div class="table-column bottom-right-radius">
+          <div class="flex-row-center">
+            <div class="emoji">\u{1F698}</div> ${printCarInfo(ride)}
           </div>
-        </div>
-        </div>
-        <div class="table-row">
-          <div class="table-head bottom-left-radius" >Car</div>
-          <div class="table-column bottom-right-radius">
-            <div class="flex-row-center">
-            <div class="emoji">\u{1F698}</div> ${printCarInfo(ride)}</div>
-            </div>
         </div>
       </div>
     </div>
-    <br>
-    <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
-  </body>
-  </html>
+  </div>
+  <br>
+  <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
+</body>
+
+</html>
   `
     );
     return doc;

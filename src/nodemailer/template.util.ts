@@ -1,15 +1,25 @@
+import { getDay, getMonth, getTime, getWeekDay } from "../utils/time.util";
 import { TransportData } from "../models";
-import { getDate, getTime } from "../utils/general.util";
 
-const printPickupInfo = (ride: TransportData) =>
-  `${getDate(ride.routes[0].availableAt)} - ${getTime(
-    ride.routes[0].availableAt
-  )}`;
+const printDateInfo = (date: string) => {
+  const day = getDay(date);
+  const month = getMonth(date);
+  const time = getTime(date);
 
-const printReturnInfo = (ride: TransportData) =>
-  `${getDate(ride.routes[0].expireTime)} - ${getTime(
-    ride.routes[0].expireTime
-  )}`;
+  return `${day} ${month} ${time}`;
+};
+
+const printDateIntervalInfo = (pickupDate: string, returnDate: string) => {
+  const dayPickup = getDay(pickupDate);
+  const monthPickup = getMonth(pickupDate);
+
+  const dayReturn = getDay(returnDate);
+  const monthReturn = getMonth(returnDate);
+
+  return `${getWeekDay(pickupDate)} ${dayPickup} ${monthPickup} - ${getWeekDay(
+    returnDate
+  )} ${dayReturn} ${monthReturn} `;
+};
 
 const printCarInfo = (ride: TransportData) => ride.routes[0].carModel;
 
@@ -26,7 +36,7 @@ export const style = /*html*/ `
     }
 
     .preamble {
-      padding: 24px;
+      padding: 0 24px;
     }
 
     .container {
@@ -88,7 +98,7 @@ export const style = /*html*/ `
         background-color: #fffb00;
         color: black;
         font-weight: bold;
-        min-width: 50px;
+        width: 110px;
         display: flex;
         justify-content: left;
         align-items: center;
@@ -114,62 +124,72 @@ export const style = /*html*/ `
 `;
 
 export const buildHtml = (ride: TransportData) => {
-  const doc = /*html*/ `<html>
-  <head>
-    ${style}
-  </head>
-  <body>
-    <div class="container">
-      <div>
-        <h1>🚗💨</h1>
-      </div> 
-       <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en titt på den här.</p>
-      <div class="table-grid">
-        <div class="table-row">
-          <div class="table-head">Pickup</div>
-          <div class="table-column">
-            <div class="flex-row-center">
-              <div class="emoji">➡️</div><div>${ride.pickupLocationName}</div>
-            </div>
+  const doc = /*html*/ `
+  <html>
+
+<head>
+  ${style}
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <h1>🚗💨</h1>
+    </div>
+    <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en
+      titt på den här.</p>
+    <p>Tillgänglig mellan <b> ${printDateIntervalInfo(
+      ride.routes[0].availableAt,
+      ride.routes[0].expireTime
+    )}</b></p>
+    <div class="table-grid">
+      <div class="table-row">
+        <div class="table-head top-left-radius">Hämtas</div>
+        <div class="table-column top-right-radius">
+          <div class="flex-row-center">
+            <div class="emoji">➡️</div>
+            <div>${ride.pickupLocationName}</div>
           </div>
         </div>
-        <div class="table-row">
-          <div class="table-head">Return</div>
-          <div class="table-column">
-            <div class="flex-row-center">
-              <div class="emoji">⬅️</div><div>${ride.returnLocationName}</div>
-            </div>
+      </div>
+      <div class="table-row">
+        <div class="table-head">Lämnas</div>
+        <div class="table-column">
+          <div class="flex-row-center">
+            <div class="emoji">⬅️</div>
+            <div>${ride.returnLocationName}</div>
           </div>
         </div>
-        <div class="table-row">
-          <div class="table-head">When</div>
-          <div class="table-column">
-          <div class="time-container">
-          <div class="hourglass-container">⌛</div>
+      </div>
+      <div class="table-row">
+        <div class="table-head">Tillgänglig</div>
+        <div class="table-column">
+          <div class="flex-row-center">
+            <div class="emoji">🗓️</div>
             <div>
-              <div>
-          ${printPickupInfo(ride)}
-              </div>
-              <div>
-            ${printReturnInfo(ride)}
+              ${printDateInfo(ride.routes[0].availableAt)} och ${printDateInfo(
+    ride.routes[0].expireTime
+  )}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="table-row">
+        <div class="table-head bottom-left-radius">Bilmodell</div>
+        <div class="table-column bottom-right-radius">
+          <div class="flex-row-center">
+            <div class="emoji">🚘</div> ${printCarInfo(ride)}
           </div>
-        </div>
-        </div>
-        <div class="table-row">
-          <div class="table-head bottom-left-radius" >Car</div>
-          <div class="table-column bottom-right-radius">
-            <div class="flex-row-center">
-            <div class="emoji">🚘</div> ${printCarInfo(ride)}</div>
-            </div>
         </div>
       </div>
     </div>
-    <br>
-    <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
-  </body>
-  </html>
+  </div>
+  <br>
+  <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
+</body>
+
+</html>
   `;
 
   return doc;

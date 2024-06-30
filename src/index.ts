@@ -1,5 +1,5 @@
 import app from "./app";
-import { ONE_HOUR } from "./utils/general.util";
+import { ONE_HOUR } from "./utils/time.util";
 
 const run = async () => {
   console.log("Booting");

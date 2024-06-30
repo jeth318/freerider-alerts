@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import { TransportData } from "../models";
 import { eHandler } from "../utils/error.util";
 import { getPickupCity, getReturnCity } from "../utils/ride.util";
-import { buildHtml, style } from "./template.util";
+import { buildHtml } from "./template.util";
 
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -12,18 +12,14 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-let defaultMailDetails = {
-  from: "Freerider leacher",
-  to: ["shopping.kalle.stropp@gmail.com"],
-};
-
 const buildSubject = (ride: TransportData) => {
   return `${getPickupCity(ride)} to ${getReturnCity(ride)}`;
 };
 
 export const sendEmail = (ride: TransportData) => {
   const mailDetails = {
-    ...defaultMailDetails,
+    from: "Freerider alerts",
+    to: ["shopping.kalle.stropp@gmail.com"],
     subject: buildSubject(ride),
     html: buildHtml(ride),
   };
