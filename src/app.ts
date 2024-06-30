@@ -28,8 +28,17 @@ export default async () => {
 
     const gbg = getRidesByPickupCity("göteborg", rides);
     const sthlm = getRidesByPickupCity("stockholm", rides);
+    const hsand = getRidesByPickupCity("härnösand", rides);
+    const umea = getRidesByPickupCity("umeå", rides);
 
-    const allMatchingRides = [...gbgSthlm, ...sthlmGbg, ...gbg, ...sthlm];
+    const allMatchingRides = [
+      ...gbgSthlm,
+      ...sthlmGbg,
+      ...gbg,
+      ...sthlm,
+      ...hsand,
+      ...umea,
+    ];
 
     if (allMatchingRides?.length) {
       allMatchingRides.forEach(async (ride) => {
