@@ -5,9 +5,8 @@ import {
 } from "./utils/ride.util";
 import { insertRide, isRideKnown } from "./db/actions";
 import { sendEmail } from "./nodemailer";
-import { errorHandler } from "./utils/error.util";
+import { eHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
-
 export default async () => {
   console.log("Tick");
   try {
@@ -44,9 +43,7 @@ export default async () => {
         success && sendEmail(ride);
       });
     }
-  } catch (error) {
-    console.log("Hej");
-
-    errorHandler("run", error);
+  } catch (e) {
+    eHandler(e);
   }
 };

@@ -1,5 +1,5 @@
 import mockRidesData from "../dev/mock-rides-response";
-import { errorHandler } from "../utils/error.util";
+import { eHandler } from "../utils/error.util";
 import { ridesUrl } from "./config/index";
 
 export const fetchRides = async () => {
@@ -11,9 +11,8 @@ export const fetchRides = async () => {
       console.log("Using local mock data");
       return mockRidesData;
     }
-    1;
-  } catch (error) {
-    errorHandler("fetchRides", error);
+  } catch (e) {
+    eHandler(e);
     return [];
   }
 };

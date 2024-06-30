@@ -1,3 +1,18 @@
+import { TransportData } from "../models";
+import { getDate, getTime } from "../utils/general.util";
+
+const printPickupInfo = (ride: TransportData) =>
+  `${getDate(ride.routes[0].availableAt)} - ${getTime(
+    ride.routes[0].availableAt
+  )}`;
+
+const printReturnInfo = (ride: TransportData) =>
+  `${getDate(ride.routes[0].expireTime)} - ${getTime(
+    ride.routes[0].expireTime
+  )}`;
+
+const printCarInfo = (ride: TransportData) => ride.routes[0].carModel;
+
 export const style = `
 <style>
     body {
@@ -56,3 +71,53 @@ export const style = `
     }
 </style>
 `;
+
+export const buildHtml = (ride: TransportData) => {
+  return `<html>
+  <head>
+    ${style}
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>🚗💨</h1>
+       
+      </div> 
+       <p style="padding: 12px;">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en titt på den här.</p>
+      <table>
+        <tr>
+          <th>Pickup</th>
+          <td>➡️ ${ride.pickupLocationName}</td>
+        </tr>
+        <tr>
+          <th>Return</th>
+          <td>⬅️ ${ride.returnLocationName}</td>
+        </tr>
+        <tr>
+          <th>When</th>
+          <td>
+          <div class="time-container">
+          <div class="hourglass-container">⌛</div>
+            <div>
+              <div>
+          ${printPickupInfo(ride)}
+              </div>
+              <div>
+            ${printReturnInfo(ride)}
+            </div>
+          </div>
+          </div>
+        </td>
+        </tr>
+        <tr>
+          <th>Car</th>
+          <td>🚘 ${printCarInfo(ride)}</td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <a href="https://www.hertzfreerider.se/sv-se">Till alla gratisresor</a>
+  </body>
+  </html>
+  `;
+};
