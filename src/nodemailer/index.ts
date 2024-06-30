@@ -7,8 +7,8 @@ import { buildHtml } from "./template.util";
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "public.kalle.stropp@gmail.com",
-    pass: "bmurmabsyozozbce",
+    user: process.env.EMAIL_SENDER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -18,8 +18,11 @@ const buildSubject = (ride: TransportData) => {
 
 export const sendEmail = (ride: TransportData) => {
   const mailDetails = {
-    from: "Freerider alerts",
-    to: ["shopping.kalle.stropp@gmail.com"],
+    from: {
+      name: "Hertz Alerts 🚕",
+      address: process.env.EMAIL_SENDER,
+    },
+    to: [process.env.EMAIL_RECEIVER],
     subject: buildSubject(ride),
     html: buildHtml(ride),
   };

@@ -1,4 +1,4 @@
-import mockRidesData from "../dev/mock-rides-response";
+import mockRidesData from "../dev/mock-data";
 import { eHandler } from "../utils/error.util";
 import { ridesUrl } from "./config/index";
 
