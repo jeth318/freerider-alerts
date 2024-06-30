@@ -8,9 +8,9 @@
   },
   "scripts": {
     "build": "esbuild src/index.ts --entry-names='app' --bundle --platform=node --target=node10.4 --outdir=dist",
-    "dev:email": "npm-run-all --parallel email-mock email-mock-server",
-    "email-mock": "esbuild src/dev/email-app.ts --entry-names='email-app' --bundle --platform=browser --target=node10.4 --outdir=playground --watch",
-    "email-mock-server": "nodemon src/dev/test-server.js",
+    "email-preview": "npm-run-all --parallel email-mock email-mock-server",
+    "email-mock": "esbuild src/dev/email-preview/preview.app.ts --entry-names='preview.bundle' --bundle --platform=browser --target=node10.4 --outdir=src/dev/email-preview --watch",
+    "email-mock-server": "nodemon src/dev/email-preview/server.ts",
     "deploy": "npm run build && sh ./deploy.sh",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",

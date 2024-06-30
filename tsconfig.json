@@ -6,7 +6,7 @@
     "node", "sourceMap": true, 
     "outDir": "dist", 
     "resolveJsonModule": true,
-    "types": []
+    "types": ["node"]
    },
    "include": [
     "src/*"

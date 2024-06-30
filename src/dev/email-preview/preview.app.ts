@@ -1,4 +1,4 @@
-import { buildHtml } from "./../nodemailer/template.util";
+import { buildHtml } from "../../nodemailer/template.util";
 
 const mockRide = {
   pickupLocationName: "Alingsås",
