@@ -1,8 +1,8 @@
 (() => {
   // src/utils/time.util.ts
   var ONE_HOUR = 1e3 * 3600;
-  var getDay = (date) => {
-    return new Date(date).getDay();
+  var getDate = (date) => {
+    return new Date(date).getDate();
   };
   var getMonth = (date) => {
     return months[new Date(date).getMonth()];
@@ -19,13 +19,13 @@
     return date.toISOString().slice(0, 19);
   };
   var weekdays = [
+    "s\xF6ndag",
     "m\xE5ndag",
     "tisdag",
     "onsdag",
     "torsdag",
     "fredag",
-    "l\xF6rdag",
-    "s\xF6ndag"
+    "l\xF6rdag"
   ];
   var months = [
     "januari",
@@ -44,15 +44,15 @@
 
   // src/nodemailer/template.util.ts
   var printDateInfo = (date) => {
-    const day = getDay(date);
+    const day = getDate(date);
     const month = getMonth(date);
     const time = getTime(date);
     return `${day} ${month} ${time}`;
   };
   var printDateIntervalInfo = (pickupDate, returnDate) => {
-    const dayPickup = getDay(pickupDate);
+    const dayPickup = getDate(pickupDate);
     const monthPickup = getMonth(pickupDate);
-    const dayReturn = getDay(returnDate);
+    const dayReturn = getDate(returnDate);
     const monthReturn = getMonth(returnDate);
     return `${getWeekDay(pickupDate)} ${dayPickup} ${monthPickup} - ${getWeekDay(
       returnDate
@@ -101,7 +101,7 @@
         border-collapse: collapse;
         display: flex;
         flex-direction: column;
-        padding: 10px
+        margin: 10px
     }
 
     .top-left-radius {
@@ -147,15 +147,18 @@
         background-color: #fafafa;
         width: 100%;
     }
+
     .table-row:hover .table-column {
         background-color: #f1f1f1;
     }
+
     .flex-row-center {
       display: flex;
       flex-direction: row;
       align-items: center;
       align-self: left;
     }
+
     .emoji {
       margin-right: 10px;
     }

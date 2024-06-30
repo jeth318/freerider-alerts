@@ -4,6 +4,10 @@ export const getDay = (date: string) => {
   return new Date(date).getDay();
 };
 
+export const getDate = (date: string) => {
+  return new Date(date).getDate();
+};
+
 export const getMonth = (date: string) => {
   return months[new Date(date).getMonth()];
 };
@@ -26,13 +30,13 @@ const compensateForUTC = (originalDate: string) => {
 };
 
 const weekdays = [
+  "söndag",
   "måndag",
   "tisdag",
   "onsdag",
   "torsdag",
   "fredag",
   "lördag",
-  "söndag",
 ];
 
 const months = [

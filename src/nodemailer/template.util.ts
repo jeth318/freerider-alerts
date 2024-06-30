@@ -1,21 +1,18 @@
-import { getDay, getMonth, getTime, getWeekDay } from "../utils/time.util";
+import { getDate, getMonth, getTime, getWeekDay } from "../utils/time.util";
 import { TransportData } from "../models";
 
 const printDateInfo = (date: string) => {
-  const day = getDay(date);
+  const day = getDate(date);
   const month = getMonth(date);
   const time = getTime(date);
-
   return `${day} ${month} ${time}`;
 };
 
 const printDateIntervalInfo = (pickupDate: string, returnDate: string) => {
-  const dayPickup = getDay(pickupDate);
+  const dayPickup = getDate(pickupDate);
   const monthPickup = getMonth(pickupDate);
-
-  const dayReturn = getDay(returnDate);
+  const dayReturn = getDate(returnDate);
   const monthReturn = getMonth(returnDate);
-
   return `${getWeekDay(pickupDate)} ${dayPickup} ${monthPickup} - ${getWeekDay(
     returnDate
   )} ${dayReturn} ${monthReturn} `;
@@ -63,7 +60,7 @@ export const style = /*html*/ `
         border-collapse: collapse;
         display: flex;
         flex-direction: column;
-        padding: 10px
+        margin: 10px
     }
 
     .top-left-radius {
@@ -109,15 +106,18 @@ export const style = /*html*/ `
         background-color: #fafafa;
         width: 100%;
     }
+
     .table-row:hover .table-column {
         background-color: #f1f1f1;
     }
+
     .flex-row-center {
       display: flex;
       flex-direction: row;
       align-items: center;
       align-self: left;
     }
+
     .emoji {
       margin-right: 10px;
     }
