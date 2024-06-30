@@ -48,6 +48,8 @@ export default async () => {
       });
     }
   } catch (error) {
+    console.log("Hej");
+
     errorHandler("run", error);
   }
 };
