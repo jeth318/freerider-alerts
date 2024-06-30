@@ -1,12 +1,9 @@
 import {
-  getRideByPickupCity,
   getRideId,
   getRidesByPickupAndReturnCities,
   getRidesByPickupCity,
 } from "./utils/ride.util";
-import { db } from "./db";
 import { insertRide, isRideKnown } from "./db/actions";
-import mockData from "./dev/mock-rides-response";
 import { sendEmail } from "./nodemailer";
 import { errorHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
