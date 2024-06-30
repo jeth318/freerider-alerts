@@ -2,6 +2,7 @@
 
 ENV_FILE=".env"
 
+
 # Check if the .env file exists
 if [ -f "$ENV_FILE" ]; then
     # Read the .env file line by line
