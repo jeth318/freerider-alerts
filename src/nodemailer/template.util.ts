@@ -37,8 +37,8 @@ export const style = /*html*/ `
     }
 
     .preamble-container {
-      padding-left: 24px;
-      padding-right: 24px;
+      padding-left: 12px;
+      padding-right: 12px;
     }
 
     .preamble {
@@ -104,7 +104,7 @@ export const style = /*html*/ `
     .table-head {
         background-color: #767676;
         font-weight: bold;
-        width: 110px;
+        width: 90;
         display: flex;
         justify-content: left;
         align-items: center;
@@ -130,9 +130,7 @@ export const style = /*html*/ `
     .emoji {
       margin-right: 10px;
     }
-    .text-center {
-      text-align: center;
-    }
+
 </style>
 `;
 
@@ -151,8 +149,8 @@ export const buildHtml = (ride: TransportData) => {
     </div>
     <div class="preamble-container">
       <p class="preamble">En ny gratisresa som matchar dina bevakningar har nyligen publicerats på Hertz Freerider. Ta en
-      titt på den här 🚗💨</p>
-      <p class="text-center"><b> ${printDateIntervalInfo(
+      titt på den här.</p>
+      <p>Hämtas<b> ${printDateIntervalInfo(
         ride.routes[0].availableAt,
         ride.routes[0].expireTime
       )}</b>
@@ -161,7 +159,7 @@ export const buildHtml = (ride: TransportData) => {
     
     <div class="table-grid">
       <div class="table-row">
-        <div class="table-head top-left-radius">Hämtas</div>
+        <div class="table-head top-left-radius">Från</div>
         <div class="table-column top-right-radius">
           <div class="flex-row-center">
             <div class="emoji">➡️</div>
@@ -170,7 +168,7 @@ export const buildHtml = (ride: TransportData) => {
         </div>
       </div>
       <div class="table-row">
-        <div class="table-head">Lämnas</div>
+        <div class="table-head">Till</div>
         <div class="table-column">
           <div class="flex-row-center">
             <div class="emoji">⬅️</div>
@@ -179,7 +177,7 @@ export const buildHtml = (ride: TransportData) => {
         </div>
       </div>
       <div class="table-row">
-        <div class="table-head">När</div>
+        <div class="table-head">Hämtas</div>
         <div class="table-column">
           <div class="flex-row-center">
             <div class="emoji">🗓️</div>

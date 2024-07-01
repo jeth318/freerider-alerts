@@ -29,21 +29,13 @@ export default async () => {
     const hsand = getRidesByPickupCity("härnösand", rides);
     const umea = getRidesByPickupCity("umeå", rides);
 
-    const allMatchingRides = [
-      ...gbgSthlm,
-      ...sthlmGbg,
-      ...gbg,
-      ...sthlm,
-      ...uppsala,
-      ...hsand,
-      ...umea,
-    ];
+    const allMatchingRides = [...gbgSthlm];
 
     if (allMatchingRides?.length) {
       allMatchingRides.forEach(async (ride) => {
         const rideId = getRideId(ride);
         const success = await insertRide(rideId);
-        success && sendEmail(ride);
+        !success && sendEmail(ride);
       });
     }
   } catch (e) {
