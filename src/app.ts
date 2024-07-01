@@ -3,12 +3,13 @@ import {
   getRidesByPickupAndReturnCities,
   getRidesByPickupCity,
 } from "./utils/ride.util";
-import { insertRide, isRideKnown } from "./db/actions";
+import { insertRide } from "./db/actions";
 import { sendEmail } from "./nodemailer";
 import { eHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
+import { tick } from "./utils/time.util";
 export default async () => {
-  console.log("Tick");
+  tick();
   try {
     const rides = await fetchRides();
     const gbgSthlm = getRidesByPickupAndReturnCities(
@@ -24,6 +25,7 @@ export default async () => {
 
     const gbg = getRidesByPickupCity("göteborg", rides);
     const sthlm = getRidesByPickupCity("stockholm", rides);
+    const uppsala = getRidesByPickupCity("uppsala", rides);
     const hsand = getRidesByPickupCity("härnösand", rides);
     const umea = getRidesByPickupCity("umeå", rides);
 
@@ -32,6 +34,7 @@ export default async () => {
       ...sthlmGbg,
       ...gbg,
       ...sthlm,
+      ...uppsala,
       ...hsand,
       ...umea,
     ];
@@ -39,7 +42,7 @@ export default async () => {
     if (allMatchingRides?.length) {
       allMatchingRides.forEach(async (ride) => {
         const rideId = getRideId(ride);
-        const { success } = await insertRide(rideId);
+        const success = await insertRide(rideId);
         success && sendEmail(ride);
       });
     }

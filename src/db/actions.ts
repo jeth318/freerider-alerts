@@ -29,9 +29,9 @@ export const isRideKnown = async (id: string) => {
 export const insertRide = async (hertzRideId: string) => {
   try {
     await db.insert(rides).values({ hertzRideId });
-    return { success: true };
+    return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
-    return { success: false };
+    return false;
   }
 };

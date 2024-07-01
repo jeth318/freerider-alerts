@@ -1,5 +1,7 @@
 export const ONE_HOUR = 1000 * 3600;
-
+export const tick = () => {
+  console.log(`tick: ${new Date().toLocaleString("sv-SE")}`);
+};
 export const getDay = (date: string) => {
   return new Date(date).getDay();
 };
