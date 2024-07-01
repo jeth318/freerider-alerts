@@ -1,5 +1,6 @@
 import { getDate, getMonth, getTime, getWeekDay } from "../utils/time.util";
 import { TransportData } from "../models";
+import { getPickupCity, getReturnCity } from "../utils/ride.util";
 
 const printDateInfo = (date: string) => {
   const day = getDate(date);
@@ -160,7 +161,7 @@ export const buildHtml = (ride: TransportData) => {
         <div class="table-column top-right-radius">
           <div class="flex-row-center">
             <div class="emoji">➡️</div>
-            <div>${ride.pickupLocationName}</div>
+            <div>${getPickupCity(ride)}</div>
           </div>
         </div>
       </div>
@@ -169,7 +170,7 @@ export const buildHtml = (ride: TransportData) => {
         <div class="table-column">
           <div class="flex-row-center">
             <div class="emoji">⬅️</div>
-            <div>${ride.returnLocationName}</div>
+            <div>${getReturnCity(ride)}</div>
           </div>
         </div>
       </div>
