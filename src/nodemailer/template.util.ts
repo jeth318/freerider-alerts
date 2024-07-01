@@ -22,7 +22,7 @@ const printDateIntervalInfo = (pickupDate: string, returnDate: string) => {
 const printCarInfo = (ride: TransportData) => ride.routes[0].carModel;
 
 export const buildSubject = (ride: TransportData) => {
-  return `${getPickupCity(ride)} to ${getReturnCity(ride)}`;
+  return `${getPickupCity(ride)} till ${getReturnCity(ride)}`;
 };
 
 export const style = /*html*/ `
