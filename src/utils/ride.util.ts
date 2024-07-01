@@ -1,6 +1,7 @@
 import { getStoredRideByTransportId } from "./../db/actions";
 import { TransportData } from "../models";
 import { DbRide } from "../models";
+import { capitalizeFirst } from "./general.util";
 
 export const getRidesByPickupCity = (city: string, rides: TransportData[]) => {
   return rides.filter((ride) => getRideByPickupCity(city, ride));
@@ -38,6 +39,6 @@ export const getRide = (ride: TransportData) => {
 };
 
 export const getPickupCity = (ride: TransportData) =>
-  ride.routes[0].pickupLocation.city;
+  capitalizeFirst(ride.routes[0].pickupLocation.city);
 export const getReturnCity = (ride: TransportData) =>
-  ride.routes[0].returnLocation.city;
+  capitalizeFirst(ride.routes[0].returnLocation.city);
