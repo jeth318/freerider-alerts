@@ -16,7 +16,7 @@ export const getMonth = (date: string) => {
 
 export const getTime = (date: string) => {
   return new Date(compensateForUTC(date))
-    .toLocaleTimeString()
+    .toLocaleTimeString("sv-SE")
     .replace(":00", "");
 };
 
