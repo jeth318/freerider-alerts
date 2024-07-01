@@ -1,8 +1,7 @@
 import nodemailer from "nodemailer";
 import { TransportData } from "../models";
 import { eHandler } from "../utils/error.util";
-import { getPickupCity, getReturnCity } from "../utils/ride.util";
-import { buildHtml } from "./template.util";
+import { buildHtml, buildSubject } from "./template.util";
 
 let mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -11,10 +10,6 @@ let mailTransporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
-
-const buildSubject = (ride: TransportData) => {
-  return `${getPickupCity(ride)} to ${getReturnCity(ride)}`;
-};
 
 export const sendEmail = (ride: TransportData) => {
   const mailDetails = {

@@ -14,7 +14,7 @@ const data: TransportData[] = [
           country: "se",
           emailAddress: "hertz.alingsas@brandtbil.se",
           address: "Stråhles allé 6",
-          city: "Alingsås",
+          city: "ALINGSÅS",
           phoneNumber: "+46 (0)322 668880",
           regularOpeningHours: {
             "1": {
