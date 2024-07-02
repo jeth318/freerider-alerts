@@ -42,3 +42,8 @@ export const getPickupCity = (ride: TransportData) =>
   capitalizeFirst(ride.routes[0].pickupLocation.city);
 export const getReturnCity = (ride: TransportData) =>
   capitalizeFirst(ride.routes[0].returnLocation.city);
+
+export const getPickupLocation = (ride: TransportData) =>
+  ride.pickupLocationName;
+export const getReturnLocation = (ride: TransportData) =>
+  ride.returnLocationName;
