@@ -109,7 +109,7 @@ export const style = /*html*/ `
     .table-head {
         background-color: #767676;
         font-weight: bold;
-        width: 90;
+        width: 90px;
         display: flex;
         justify-content: left;
         align-items: center;
