@@ -14,7 +14,7 @@ let mailTransporter = nodemailer.createTransport({
 export const sendEmail = (ride: TransportData) => {
   const mailDetails = {
     from: {
-      name: "Hertz Alerts 🚕",
+      name: "Hertz Alertz 🚕",
       address: process.env.EMAIL_SENDER,
     },
     to: [process.env.EMAIL_RECEIVER],
