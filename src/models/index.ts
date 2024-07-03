@@ -1,4 +1,3 @@
-import { TransportData } from "./index";
 export type OpeningHours = {
   openingTime: string | null;
   closingTime: string | null;
