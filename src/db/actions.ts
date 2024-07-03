@@ -1,10 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
-<<<<<<< Updated upstream
 import { cities, riders, rides, subscriptions } from "./schemas";
-=======
-import { riders, rides, subscriptions } from "./schemas";
->>>>>>> Stashed changes
 import { eHandler, isDuplicateConstraint } from "../utils/error.util";
 import { City } from "../models";
 
@@ -79,7 +75,6 @@ export const insertRider = async (email: string, first_name: string) => {
   }
 };
 
-<<<<<<< Updated upstream
 export type FilterType = "from" | "to" | "from_to";
 
 type InsertSubscriptionProps = {
@@ -95,28 +90,11 @@ export const insertSubscription = async ({
   toCity,
   filterType,
   hashCode,
-=======
-type InsertSubscriptionProps = {
-  riderEmail: string;
-  fromCityId?: number;
-  toCityId?: number;
-  filterType: "from" | "to" | "from_to";
-};
-export const insertSubscription = async ({
-  riderEmail,
-  fromCityId,
-  toCityId,
-  filterType,
->>>>>>> Stashed changes
 }: InsertSubscriptionProps) => {
   try {
     await db
       .insert(subscriptions)
-<<<<<<< Updated upstream
       .values({ hashCode, riderEmail, fromCity, toCity, filterType });
-=======
-      .values({ riderEmail, fromCityId, toCityId, filterType });
->>>>>>> Stashed changes
     return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
