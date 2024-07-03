@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { TransportData } from "../models";
+import { SubscribedRide, TransportData } from "../models";
 import { eHandler } from "../utils/error.util";
 import { buildHtml, buildSubject } from "./template.util";
 
@@ -17,7 +17,7 @@ export const sendEmail = (ride: SubscribedRide) => {
       name: "Hertz Alertz 🚕",
       address: process.env.EMAIL_SENDER,
     },
-    to: [ride.subscribers],
+    to: [ride.recipients],
     subject: buildSubject(ride),
     html: buildHtml(ride),
   };
