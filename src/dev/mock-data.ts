@@ -66,7 +66,7 @@ const data: TransportData[] = [
           country: "se",
           emailAddress: "lund@hertz.se",
           address: "Västra Stationstorget 10",
-          city: "LIUND",
+          city: "Lund",
           phoneNumber: "+46 (0)46 30 60 12",
           regularOpeningHours: {
             "1": {

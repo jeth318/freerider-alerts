@@ -1,31 +1,38 @@
+import { getRidesMergedWithRecipients } from "./utils/wip.util";
 import { getRideId } from "./utils/ride.util";
-import { getAllSubscriptions, insertRide } from "./db/actions";
 import { eHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
-import { tick } from "./utils/time.util";
+import { compensateForUTC, tick } from "./utils/time.util";
 import {
+  addFilter,
   addSubscription,
   getRidesMergedWithSubscribers,
 } from "./utils/general.util";
+import { insertOffer } from "./db/actions";
 
 export default async () => {
   tick();
   try {
-    await addSubscription();
+    /*     await addFilter({
+      cityTo: "Lycksele",
+      type: "from",
+    });
+
+    await addSubscription({
+      filterHash: "9fa81f22ba8cbf6247c38f372836df96",
+      riderEmail: "jesper.thornberg@me.com",
+    }); */
+
     const rides = await fetchRides();
+    const ridesWithRecipients = await getRidesMergedWithRecipients(rides);
 
-    const subscriptions = await getAllSubscriptions();
-    const ridesWithSubscriptions = getRidesMergedWithSubscribers(
-      rides,
-      subscriptions
-    );
-
-    if (ridesWithSubscriptions?.length) {
-      ridesWithSubscriptions.forEach(async (ride) => {
+    if (ridesWithRecipients?.length) {
+      ridesWithRecipients.forEach(async (ride) => {
         const rideId = getRideId(ride);
-        const success = await insertRide(rideId);
-        if (!success && ride.subscribers.length) {
-          console.log("Would email:", ride);
+
+        const success = await insertOffer({ hertzOfferId: rideId });
+        if (!success && ride.recipients.length) {
+          console.log("Would email:", ride.recipients);
           //sendEmail(ride);
         }
       });

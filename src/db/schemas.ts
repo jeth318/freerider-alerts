@@ -1,29 +1,35 @@
-import { pgTable, serial, text, integer } from "drizzle-orm/pg-core";
-export const rides = pgTable("rides", {
+import { pgTable, serial, text } from "drizzle-orm/pg-core";
+
+export const offers = pgTable("offers", {
   id: serial("id").primaryKey(),
-  hertzRideId: text("hertz_ride_id").notNull().unique(),
+  hertzOfferId: text("hertz_offer_id").notNull().unique(),
+  added: text("added").notNull(),
+});
+
+export const filters = pgTable("filters", {
+  id: serial("id").primaryKey(),
+  hash: text("hash").notNull().unique(),
+  cityFrom: text("city_from").notNull(),
+  cityTo: text("city_to").notNull(),
+  type: text("type").notNull(),
 });
 
 export const riders = pgTable("riders", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
-  first_name: text("first_name").notNull().unique(),
-});
-
-export const cities = pgTable("cities", {
-  id: serial("id").primaryKey(),
-  tracCode: text("trac_code").notNull().unique(),
-  name: text("name").notNull().unique(),
-  country: text("country").notNull(),
+  firstName: text("first_name").notNull(),
 });
 
 export const subscriptions = pgTable("subscriptions", {
   id: serial("id").primaryKey(),
-  hashCode: text("hash_code").notNull().unique(),
-  riderEmail: text("rider_email")
-    .notNull()
-    .references(() => riders.email),
-  fromCity: text("from_city").references(() => cities.id),
-  toCity: text("to_city").references(() => cities.id),
-  filterType: text("filter_type").notNull(),
+  hash: text("hash").notNull().unique(),
+  riderEmail: text("rider_email").notNull(),
+  filterHash: text("filter_hash").notNull(),
+});
+
+export const cities = pgTable("cities", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  tracCode: text("trac_code").notNull(),
+  country: text("country").notNull(),
 });

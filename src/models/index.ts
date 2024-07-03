@@ -70,3 +70,25 @@ export type City = {
 export type TransportDataWithSubscribers = TransportData & {
   subscribers: string[];
 };
+export type Offer = {
+  hertzOfferId: string;
+  added: string;
+};
+
+export type Filter = {
+  hash: string;
+  cityFrom?: string;
+  cityTo?: string;
+  type: string;
+};
+
+export type Rider = {
+  email: string;
+  firstName: string;
+};
+
+export type Subscription = {
+  hash?: string;
+  riderEmail: string;
+  filterHash: string;
+};

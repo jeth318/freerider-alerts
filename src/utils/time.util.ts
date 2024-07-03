@@ -24,7 +24,7 @@ export const getWeekDay = (date: string) => {
   return weekdays[new Date(date).getDay()];
 };
 
-const compensateForUTC = (originalDate: string) => {
+export const compensateForUTC = (originalDate: string) => {
   const date = new Date(originalDate + "Z");
   date.setHours(date.getHours() + 2);
 

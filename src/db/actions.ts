@@ -1,53 +1,14 @@
 import { eq } from "drizzle-orm";
 import { db } from ".";
-import { cities, riders, rides, subscriptions } from "./schemas";
+import { cities, filters, offers, riders, subscriptions } from "./schemas";
 import { eHandler, isDuplicateConstraint } from "../utils/error.util";
-import { City } from "../models";
+import { City, Filter, Offer, Rider, Subscription } from "../models";
 
-export const getStoredRideByTransportId = async (id: string) => {
+export const insertOffer = async ({ hertzOfferId }: Omit<Offer, "added">) => {
   try {
-    return await db.select().from(rides).where(eq(rides.hertzRideId, id));
-  } catch (e) {
-    eHandler(e);
-    return Promise.reject(e);
-  }
-};
-
-export const getSubscriptionsByRiderId = async (id: string) => {
-  try {
-    return await db.select().from(rides).where(eq(rides.hertzRideId, id));
-  } catch (e) {
-    eHandler(e);
-    return Promise.reject(e);
-  }
-};
-
-export const getAllSubscriptions = async () => {
-  try {
-    return await db.select().from(subscriptions);
-  } catch (e) {
-    eHandler(e);
-    return Promise.reject(e);
-  }
-};
-
-export const isRideKnown = async (id: string) => {
-  try {
-    const result = await db
-      .select()
-      .from(rides)
-      .where(eq(rides.hertzRideId, id));
-
-    return !!result?.length;
-  } catch (e) {
-    eHandler(e);
-    return Promise.reject(e);
-  }
-};
-
-export const insertCity = async (city: City) => {
-  try {
-    await db.insert(cities).values(city);
+    await db
+      .insert(offers)
+      .values({ hertzOfferId, added: new Date().toISOString() });
     return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
@@ -55,9 +16,9 @@ export const insertCity = async (city: City) => {
   }
 };
 
-export const insertRide = async (hertzRideId: string) => {
+export const insertCity = async ({ name, tracCode, country }: City) => {
   try {
-    await db.insert(rides).values({ hertzRideId });
+    await db.insert(cities).values({ name, tracCode, country });
     return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
@@ -65,39 +26,87 @@ export const insertRide = async (hertzRideId: string) => {
   }
 };
 
-export const insertRider = async (email: string, first_name: string) => {
+export const insertFilter = async ({
+  hash,
+  cityFrom,
+  cityTo,
+  type,
+}: Filter) => {
   try {
-    await db.insert(riders).values({ email, first_name });
+    await db.insert(filters).values({ hash, cityFrom, cityTo, type });
     return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
     return false;
+  }
+};
+
+export const insertRider = async ({ email, firstName }: Rider) => {
+  try {
+    await db.insert(riders).values({ email, firstName });
+    return true;
+  } catch (e) {
+    !isDuplicateConstraint(e) && eHandler(e);
+    return false;
+  }
+};
+
+export const insertSubscription = async ({
+  hash,
+  riderEmail,
+  filterHash,
+}: Subscription) => {
+  try {
+    await db.insert(subscriptions).values({ hash, riderEmail, filterHash });
+    return true;
+  } catch (e) {
+    !isDuplicateConstraint(e) && eHandler(e);
+    return false;
+  }
+};
+
+// Get all cities
+export const getCities = async () => {
+  try {
+    const result = await db.select().from(cities);
+    return result;
+  } catch (e) {
+    eHandler(e);
+    return [];
+  }
+};
+
+// Get all filters
+export const getFilters = async () => {
+  try {
+    const result = await db.select().from(filters);
+    return result;
+  } catch (e) {
+    eHandler(e);
+    return [];
+  }
+};
+
+// Get all riders
+export const getRiders = async () => {
+  try {
+    const result = await db.select().from(riders);
+    return result;
+  } catch (e) {
+    eHandler(e);
+    return [];
+  }
+};
+
+// Get all subscriptions
+export const getSubscriptions = async () => {
+  try {
+    const result = await db.select().from(subscriptions);
+    return result;
+  } catch (e) {
+    eHandler(e);
+    return [];
   }
 };
 
 export type FilterType = "from" | "to" | "from_to";
-
-type InsertSubscriptionProps = {
-  riderEmail: string;
-  fromCity?: string;
-  toCity?: string;
-  filterType: string;
-  hashCode: string;
-};
-export const insertSubscription = async ({
-  riderEmail,
-  fromCity,
-  toCity,
-  filterType,
-  hashCode,
-}: InsertSubscriptionProps) => {
-  try {
-    await db
-      .insert(subscriptions)
-      .values({ hashCode, riderEmail, fromCity, toCity, filterType });
-    return true;
-  } catch (e) {
-    !isDuplicateConstraint(e) && eHandler(e);
-    return false;
-  }
-};

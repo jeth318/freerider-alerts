@@ -1,7 +1,8 @@
-import { subscriptions } from "./../db/schemas";
-import { insertSubscription } from "../db/actions";
+import { Rider, Subscription } from "./../models/index";
+import { insertFilter, insertRider, insertSubscription } from "../db/actions";
 import { genHash } from "./db.util";
 import { getPickupCity, getReturnCity } from "./ride.util";
+import { Filter } from "../models";
 
 export const removeDuplicates = (arr) => {
   return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -65,13 +66,25 @@ export const getSubscribersForRide = (ride, subscriptions) => {
   return [...subscribersFrom, ...subscribersTo, ...subscribersFromTo];
 };
 
-export const addSubscription = async () => {
-  const subscription = {
-    riderEmail: "gaming.kalle.stropp@gmail.com",
-    filterType: "from",
-    toCity: "Luleå",
-  };
+export const addFilter = async ({
+  cityFrom,
+  cityTo,
+  type,
+}: Omit<Filter, "hash">) => {
+  const filter = { cityFrom, cityTo, type };
+  const hash = genHash(filter);
+  await insertFilter({ hash, ...filter });
+};
 
-  const hashCode = genHash(subscription);
-  await insertSubscription({ hashCode, ...subscription });
+export const addSubscription = async ({
+  riderEmail,
+  filterHash,
+}: Subscription) => {
+  const subscription = { riderEmail, filterHash };
+  const hash = genHash(subscription);
+  await insertSubscription({ hash, ...subscription });
+};
+
+export const addRider = async ({ email, firstName }: Rider) => {
+  await insertRider({ email, firstName });
 };
