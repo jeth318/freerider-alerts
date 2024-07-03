@@ -1,4 +1,4 @@
-import { getRidesMergedWithRecipients } from "./utils/wip.util";
+import { getSubscribedOffers } from "./utils/wip.util";
 import { getRideId } from "./utils/ride.util";
 import { eHandler } from "./utils/error.util";
 import { fetchRides } from "./resources/hertz.resource";
@@ -14,20 +14,21 @@ export default async () => {
   tick();
   try {
     /*     await addFilter({
-      cityTo: "Lycksele",
-      type: "from",
-    });
+      cityFrom: "Vänersborg",
+      cityTo: "Jönköping",
+      type: "from_to",
+    }); */
 
-    await addSubscription({
-      filterHash: "9fa81f22ba8cbf6247c38f372836df96",
-      riderEmail: "jesper.thornberg@me.com",
+    /*     await addSubscription({
+      filterHash: "5c328436de93e67c8b8c55c39c6d2105",
+      riderEmail: "orvar@jovars.se",
     }); */
 
     const rides = await fetchRides();
-    const ridesWithRecipients = await getRidesMergedWithRecipients(rides);
+    const subscribedRides = await getSubscribedOffers(rides);
 
-    if (ridesWithRecipients?.length) {
-      ridesWithRecipients.forEach(async (ride) => {
+    if (subscribedRides?.length) {
+      subscribedRides.forEach(async (ride) => {
         const rideId = getRideId(ride);
 
         const success = await insertOffer({ hertzOfferId: rideId });
