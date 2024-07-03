@@ -34,7 +34,7 @@ export default async () => {
         const rideId = getRideId(ride);
 
         const success = await insertOffer({ hertzOfferId: rideId });
-        if (!success && ride.recipients.length) {
+        if (success && ride.recipients.length) {
           sendEmail(ride);
         }
       });
