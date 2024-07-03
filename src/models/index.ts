@@ -1,3 +1,4 @@
+import { TransportData } from "./index";
 export type OpeningHours = {
   openingTime: string | null;
   closingTime: string | null;
@@ -59,4 +60,14 @@ export type DbRide = {
   id: string;
   textModifiers: string;
   hertzRideId: string;
+};
+
+export type City = {
+  tracCode: string;
+  name: string;
+  country: string;
+};
+
+export type TransportDataWithSubscribers = TransportData & {
+  subscribers: string[];
 };

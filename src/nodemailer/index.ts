@@ -11,13 +11,13 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = (ride: TransportData) => {
+export const sendEmail = (ride: TransportData & { subscribers: string[] }) => {
   const mailDetails = {
     from: {
       name: "Hertz Alertz 🚕",
       address: process.env.EMAIL_SENDER,
     },
-    to: [process.env.EMAIL_RECEIVER],
+    to: [ride.subscribers],
     subject: buildSubject(ride),
     html: buildHtml(ride),
   };

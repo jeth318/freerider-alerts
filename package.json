@@ -37,6 +37,7 @@
     "@planetscale/database": "^1.18.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
+    "jshashes": "^1.0.8",
     "nodemailer": "^6.9.14"
   }
 }
