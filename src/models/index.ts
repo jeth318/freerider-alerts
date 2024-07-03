@@ -92,3 +92,10 @@ export type Subscription = {
   riderEmail: string;
   filterHash: string;
 };
+
+export type SubscribedRide = {
+  recipients: any;
+  pickupLocationName: string;
+  returnLocationName: string;
+  routes: Route[];
+};

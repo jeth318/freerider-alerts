@@ -1,3 +1,4 @@
+import { sendEmail } from "./nodemailer/index";
 import { getSubscribedOffers } from "./utils/wip.util";
 import { getRideId } from "./utils/ride.util";
 import { eHandler } from "./utils/error.util";
@@ -9,6 +10,7 @@ import {
   getRidesMergedWithSubscribers,
 } from "./utils/general.util";
 import { insertOffer } from "./db/actions";
+import { SubscribedRide } from "./models";
 
 export default async () => {
   tick();
@@ -25,7 +27,7 @@ export default async () => {
     }); */
 
     const rides = await fetchRides();
-    const subscribedRides = await getSubscribedOffers(rides);
+    const subscribedRides: SubscribedRide[] = await getSubscribedOffers(rides);
 
     if (subscribedRides?.length) {
       subscribedRides.forEach(async (ride) => {
@@ -33,8 +35,7 @@ export default async () => {
 
         const success = await insertOffer({ hertzOfferId: rideId });
         if (!success && ride.recipients.length) {
-          console.log("Would email:", ride.recipients);
-          //sendEmail(ride);
+          sendEmail(ride);
         }
       });
     }

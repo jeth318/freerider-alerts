@@ -11,7 +11,7 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = (ride: TransportData & { subscribers: string[] }) => {
+export const sendEmail = (ride: SubscribedRide) => {
   const mailDetails = {
     from: {
       name: "Hertz Alertz 🚕",
