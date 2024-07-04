@@ -19,8 +19,7 @@ export default async () => {
 
         const success = await insertOffer({ hertzOfferId: rideId });
         if (success && ride.recipients.length) {
-          console.log("Would send email");
-          //sendEmail(ride);
+          sendEmail(ride);
         }
       });
     }
