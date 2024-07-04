@@ -1,3 +1,4 @@
+import { genHash } from "./../utils/db.util";
 import { eq } from "drizzle-orm";
 import { db } from ".";
 import { cities, filters, offers, riders, subscriptions } from "./schemas";
@@ -26,14 +27,10 @@ export const insertCity = async ({ name, tracCode, country }: City) => {
   }
 };
 
-export const insertFilter = async ({
-  hash,
-  cityFrom,
-  cityTo,
-  type,
-}: Filter) => {
+export const insertFilter = async ({ cityFrom, cityTo }: Filter) => {
   try {
-    await db.insert(filters).values({ hash, cityFrom, cityTo, type });
+    const hash = genHash({ cityFrom, cityTo });
+    await db.insert(filters).values({ hash, cityFrom, cityTo });
     return true;
   } catch (e) {
     !isDuplicateConstraint(e) && eHandler(e);
@@ -52,11 +49,11 @@ export const insertRider = async ({ email, firstName }: Rider) => {
 };
 
 export const insertSubscription = async ({
-  hash,
   riderEmail,
   filterHash,
 }: Subscription) => {
   try {
+    const hash = genHash({ riderEmail, filterHash });
     await db.insert(subscriptions).values({ hash, riderEmail, filterHash });
     return true;
   } catch (e) {
@@ -108,5 +105,3 @@ export const getSubscriptions = async () => {
     return [];
   }
 };
-
-export type FilterType = "from" | "to" | "from_to";

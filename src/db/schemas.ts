@@ -9,9 +9,8 @@ export const offers = pgTable("offers", {
 export const filters = pgTable("filters", {
   id: serial("id").primaryKey(),
   hash: text("hash").notNull().unique(),
-  cityFrom: text("city_from").notNull(),
-  cityTo: text("city_to").notNull(),
-  type: text("type").notNull(),
+  cityFrom: text("city_from"),
+  cityTo: text("city_to"),
 });
 
 export const riders = pgTable("riders", {

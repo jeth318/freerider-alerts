@@ -1,11 +1,70 @@
-import { Rider, Subscription } from "./../models/index";
-import { insertFilter, insertRider, insertSubscription } from "../db/actions";
-import { genHash } from "./db.util";
 import { getPickupCity, getReturnCity } from "./ride.util";
-import { Filter } from "../models";
+import { getFilters, getSubscriptions } from "../db/actions";
+import { Filter, Subscription, TransportData } from "../models";
 
-export const removeDuplicates = (arr) => {
-  return arr.filter((item, index) => arr.indexOf(item) === index);
+export const getOffersToAlert = async (rides: TransportData[]) => {
+  const allFilters: Filter[] = await getFilters();
+  const allSubscriptions: Subscription[] = await getSubscriptions();
+  const subscribedFilters = getSubscribedFilters(allFilters, allSubscriptions);
+
+  return (
+    rides
+      // Retrieve the rides caught in a subscribed filter.
+      .filter((ride) =>
+        subscribedFilters.some((filter) => isMatchingAnyCity(ride, filter))
+      )
+      .map((ride) => {
+        //  that has a filter hit.
+        const subscriptionsWithFilterHit = getSubsWithFilterHit(
+          ride,
+          subscribedFilters,
+          allSubscriptions
+        );
+
+        return {
+          ...ride,
+          recipients: getRecipients(subscriptionsWithFilterHit),
+        };
+      })
+      .filter((offer) => !!offer)
+  );
+};
+
+const getSubscribedFilters = (
+  filters: Filter[],
+  subscriptions: Subscription[]
+) => filters.filter((f) => subscriptions.some((s) => s.filterHash === f.hash));
+
+const getRecipients = (subscriptions: Subscription[]) => {
+  return removeDuplicates(subscriptions.map((sub) => sub.riderEmail));
+};
+
+const getSubsWithFilterHit = (
+  ride: TransportData,
+  filters: Filter[],
+  subscriptions: Subscription[]
+) => {
+  // For each subscription, check if it has any matching filter hash is stored.
+  return subscriptions.filter(
+    ({ filterHash }) =>
+      !!filters.filter(
+        (f) => f.hash === filterHash && !!isMatchingAnyCity(ride, f)
+      ).length
+  );
+};
+
+const isMatchingAnyCity = (ride: TransportData, filter: Filter) => {
+  const { cityFrom, cityTo } = filter;
+  switch (true) {
+    case !!cityFrom && !!cityTo:
+      return cityFrom === getPickupCity(ride) && cityTo === getReturnCity(ride);
+    case !!cityFrom:
+      return cityFrom === getPickupCity(ride);
+    case !!cityTo:
+      return cityFrom === getReturnCity(ride);
+    default:
+      return false;
+  }
 };
 
 export const capitalizeFirst = (value: string) => {
@@ -14,77 +73,6 @@ export const capitalizeFirst = (value: string) => {
   return firstChar.toUpperCase() + rest.toLocaleLowerCase();
 };
 
-export const mapRideWithSubscribers = (ride, matches) => ({
-  ...ride,
-  subscribers: removeDuplicates(matches.map(({ riderEmail }) => riderEmail)),
-});
-
-export const getRidesMergedWithSubscribers = (rides, subscriptions) =>
-  rides
-    .map((ride) => {
-      const subscribers = getSubscribersForRide(ride, subscriptions);
-      return subscribers.length
-        ? mapRideWithSubscribers(ride, subscribers)
-        : undefined;
-    })
-    .filter((ride) => !!ride);
-
-const getSubscribersByRideAndFilter = (
-  filterType: string,
-  ride,
-  subscriptions
-) => {
-  if (filterType === "from_to") {
-    return subscriptions.filter(
-      (sub) =>
-        sub.filterType === filterType &&
-        sub.fromCity === getPickupCity(ride) &&
-        sub.toCity === getReturnCity(ride)
-    );
-  }
-  return subscriptions.filter(
-    (sub) => sub.filterType === filterType && sub.toCity === getReturnCity(ride)
-  );
-};
-
-export const getSubscribersForRide = (ride, subscriptions) => {
-  const subscribersFromTo = getSubscribersByRideAndFilter(
-    "from_to",
-    ride,
-    subscriptions
-  );
-  const subscribersFrom = getSubscribersByRideAndFilter(
-    "from",
-    ride,
-    subscriptions
-  );
-  const subscribersTo = getSubscribersByRideAndFilter(
-    "to",
-    ride,
-    subscriptions
-  );
-  return [...subscribersFrom, ...subscribersTo, ...subscribersFromTo];
-};
-
-export const addFilter = async ({
-  cityFrom,
-  cityTo,
-  type,
-}: Omit<Filter, "hash">) => {
-  const filter = { cityFrom, cityTo, type };
-  const hash = genHash(filter);
-  await insertFilter({ hash, ...filter });
-};
-
-export const addSubscription = async ({
-  riderEmail,
-  filterHash,
-}: Subscription) => {
-  const subscription = { riderEmail, filterHash };
-  const hash = genHash(subscription);
-  await insertSubscription({ hash, ...subscription });
-};
-
-export const addRider = async ({ email, firstName }: Rider) => {
-  await insertRider({ email, firstName });
+export const removeDuplicates = (arr) => {
+  return arr.filter((item, index) => arr.indexOf(item) === index);
 };

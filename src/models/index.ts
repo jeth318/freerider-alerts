@@ -76,10 +76,9 @@ export type Offer = {
 };
 
 export type Filter = {
-  hash: string;
+  hash?: string;
   cityFrom?: string;
   cityTo?: string;
-  type: string;
 };
 
 export type Rider = {
