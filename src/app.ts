@@ -8,6 +8,7 @@ import { fetchRides } from "./resources/hertz.resource";
 import { tick } from "./utils/time.util";
 import { insertOffer } from "./db/actions";
 import { SubscribedRide } from "./models";
+import { sendEmail } from "./nodemailer";
 import dotenv from "dotenv";
 dotenv.config({});
 export default async () => {
@@ -24,8 +25,7 @@ export default async () => {
       const success = result.some(isSuccess);
 
       if (success && ride.recipients.length) {
-        console.log("Would send");
-        //sendEmail(ride);
+        sendEmail(ride);
       }
     });
   } catch (e) {
