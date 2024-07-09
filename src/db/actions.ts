@@ -3,19 +3,21 @@ import { eq } from "drizzle-orm";
 import { db } from ".";
 import { cities, offers, subscriptions, users } from "./schemas";
 import { eHandler, isDuplicateConstraint } from "../utils/error.util";
-import { City, Offer, Subscription } from "../models";
+import { City, Offer, Subscription, SubscriptionWithUser } from "../models";
 import { sql } from "@vercel/postgres";
 
-/* export const insertOffer = async ({
+export const insertOffer = async ({
   transportOfferId,
   fromCity,
   toCity,
-}: Omit<Offer, "added">) => {
+  expires,
+}) => {
   try {
     await db.insert(offers).values({
-      transportOfferId,
       fromCity,
+      transportOfferId,
       toCity,
+      expires,
       added: new Date().toISOString(),
     });
     return true;
@@ -23,7 +25,7 @@ import { sql } from "@vercel/postgres";
     !isDuplicateConstraint(e) && eHandler(e);
     return false;
   }
-}; */
+};
 
 // Get all cities
 export const getCities = async () => {
@@ -39,11 +41,6 @@ export const getCities = async () => {
 // Get all subscriptions
 export const getSubscriptionsWithEmail = async () => {
   try {
-    /*     const result = await db
-      .select()
-      .from(subscriptions)
-      .rightJoin(users, eq(users.id, db.cast(subscriptions.userId, "UUID"))); */
-
     const result = await sql`
       SELECT *
       FROM subscriptions
@@ -51,7 +48,16 @@ export const getSubscriptionsWithEmail = async () => {
       ON users.id = subscriptions.user_id::UUID
     `;
 
-    return result;
+    return result.rows?.map(
+      (entry): SubscriptionWithUser => ({
+        name: entry.name,
+        password: entry.password,
+        userId: entry.user_id,
+        email: entry.email,
+        fromCity: entry.from_city || null,
+        toCity: entry.to_city || null,
+      })
+    );
   } catch (e) {
     eHandler(e);
     throw new Error("Damn");

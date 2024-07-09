@@ -67,6 +67,7 @@ export type TransportDataWithSubscribers = TransportData & {
 
 export type SubscribedRide = {
   recipients: any;
+  transportOfferId: number;
   pickupLocationName: string;
   returnLocationName: string;
   routes: Route[];
@@ -87,6 +88,7 @@ export type Offer = {
   fromCity: string;
   toCity: string;
   added: string;
+  expires: string;
 };
 
 // Subscription Model
@@ -97,7 +99,14 @@ export type Subscription = {
   toCity: string | null;
 };
 
-export type SubscriptionWithUser = Subscription & User;
+export type SubscriptionWithUser = {
+  userId: string;
+  fromCity: string | null;
+  toCity: string | null;
+  name: string;
+  email: string;
+  password: string;
+};
 
 // City Model
 export type City = {

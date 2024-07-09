@@ -1,13 +1,4 @@
-import {
-  pgTable,
-  serial,
-  varchar,
-  text,
-  unique,
-  integer,
-  uuid,
-  primaryKey,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, integer, uuid } from "drizzle-orm/pg-core";
 
 const users = pgTable("users", {
   id: uuid("id").defaultRandom(),
@@ -21,6 +12,8 @@ const offers = pgTable("offers", {
   transportOfferId: integer("transport_offer_id").notNull().unique(),
   fromCity: varchar("from_city", { length: 255 }).notNull(),
   toCity: varchar("to_city", { length: 255 }).notNull(),
+  added: varchar("added", { length: 255 }).notNull(),
+  expires: varchar("expires", { length: 255 }).notNull(),
 });
 
 const subscriptions = pgTable("subscriptions", {

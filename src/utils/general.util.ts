@@ -1,44 +1,71 @@
 import { getPickupCity, getReturnCity } from "./ride.util";
 import { getSubscriptionsWithEmail } from "../db/actions";
-import { Subscription, SubscriptionWithUser, TransportData } from "../models";
+import {
+  Offer,
+  SubscribedRide,
+  Subscription,
+  SubscriptionWithUser,
+  TransportData,
+} from "../models";
 
-export const getOffersToAlert = async (rides: TransportData[]) => {
-  const allSubscriptionsPromise = await getSubscriptionsWithEmail();
-  const rows = allSubscriptionsPromise.rows as SubscriptionWithUser[];
-  const allSubscriptions = rows;
-  //console.log({ allSubscriptions });
-
-  return (
-    rides
-      // Retrieve the rides caught in a subscribed filter.
-      .filter((ride) =>
-        allSubscriptions.some((sub) => isMatchingAnyCity(ride, sub))
-      )
-      .map((ride) => {
-        //  that has a filter hit.
-        console.log("Map", ride.pickupLocationName);
-
-        const subscriptionsWithHit = [];
-        return {
-          ...ride,
-          recipients: getRecipients(subscriptionsWithHit),
-        };
-      })
-      .filter((offer) => !!offer)
+export const getRoutesFromOffer = (ride: SubscribedRide) => {
+  return ride.routes.map(
+    (route): Omit<Offer, "id"> => ({
+      transportOfferId: route.transportOfferId,
+      fromCity: getPickupCity(ride).toUpperCase(),
+      toCity: getReturnCity(ride).toUpperCase(),
+      expires: getExpiryDate(ride),
+      added: new Date().toLocaleDateString("sv-SE"),
+    })
   );
 };
 
-const getRecipients = (subscriptions: Subscription[]) => {
-  return removeDuplicates(subscriptions.map((sub) => sub.userId));
+export const isSuccess = (value: boolean) => value;
+
+export const getOffersToAlert = async (rides: TransportData[]) => {
+  const allSubscriptionsPromise = await getSubscriptionsWithEmail();
+  const rows = allSubscriptionsPromise;
+  const allSubscriptions = rows;
+  //console.log({ allSubscriptions });
+
+  return rides
+    .map((ride) => {
+      const matchingSubs = getSubscriptionsMatchingRide(ride, allSubscriptions);
+
+      if (matchingSubs.length) {
+        return {
+          ...ride,
+          transportOfferId: ride.routes[0].transportOfferId,
+          recipients: getRecipients(matchingSubs),
+        };
+      }
+    })
+    .filter((offer) => !!offer);
 };
 
-const isMatchingAnyCity = (ride: TransportData, subscription: Subscription) => {
+const getExpiryDate = (ride: SubscribedRide) => ride.routes[0].expireTime;
+
+const getRecipients = (subscriptions: SubscriptionWithUser[]) => {
+  return removeDuplicates(subscriptions.map((sub) => sub.email));
+};
+
+const getSubscriptionsMatchingRide = (
+  ride: TransportData,
+  subscriptions: SubscriptionWithUser[]
+) => {
+  return subscriptions.filter((sub) => isMatchingAnyCity(ride, sub));
+};
+
+const isMatchingAnyCity = (
+  ride: TransportData,
+  subscription: SubscriptionWithUser
+) => {
   const { fromCity, toCity } = subscription;
   /*   console.log({
     fromCity,
     toCity,
-    ridePickup: getPickupCity(ride),
-    rideReturn: getReturnCity(ride),
+    ridePickup: getPickupCity(ride).toUpperCase(),
+    rideReturn: getReturnCity(ride).toUpperCase(),
   }); */
 
   switch (true) {
