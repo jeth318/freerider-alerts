@@ -11,13 +11,22 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
+// During dev, prevent accidental spam
+const spamPrevent = (ride: SubscribedRide) => {
+  if (ride.recipients.length > 5) {
+    throw new Error("Spam prevented");
+  }
+};
+
 export const sendEmail = (ride: SubscribedRide) => {
+  spamPrevent(ride);
+
   const mailDetails = {
     from: {
       name: "Hertz Alertz 🚕",
       address: process.env.EMAIL_SENDER,
     },
-    to: [ride.recipients],
+    bcc: [ride.recipients],
     subject: buildSubject(ride),
     html: buildHtml(ride),
   };

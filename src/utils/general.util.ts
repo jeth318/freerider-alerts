@@ -61,23 +61,17 @@ const isMatchingAnyCity = (
   subscription: SubscriptionWithUser
 ) => {
   const { fromCity, toCity } = subscription;
-  /*   console.log({
-    fromCity,
-    toCity,
-    ridePickup: getPickupCity(ride).toUpperCase(),
-    rideReturn: getReturnCity(ride).toUpperCase(),
-  }); */
 
   switch (true) {
     case !!fromCity && !!toCity:
       return (
-        fromCity === getPickupCity(ride).toUpperCase() &&
-        toCity === getReturnCity(ride).toUpperCase()
+        getPickupCity(ride).toUpperCase().includes(fromCity) &&
+        getReturnCity(ride).toUpperCase().includes(toCity)
       );
     case !!fromCity:
-      return fromCity === getPickupCity(ride).toUpperCase();
+      return getPickupCity(ride).toUpperCase().includes(fromCity);
     case !!toCity:
-      return fromCity === getReturnCity(ride).toUpperCase();
+      return getReturnCity(ride).toUpperCase().includes(toCity);
     default:
       return false;
   }
