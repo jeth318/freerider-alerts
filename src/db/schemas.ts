@@ -1,34 +1,38 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  varchar,
+  text,
+  unique,
+  integer,
+  uuid,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
-export const offers = pgTable("offers", {
-  id: serial("id").primaryKey(),
-  hertzOfferId: text("hertz_offer_id").notNull().unique(),
-  added: text("added").notNull(),
+const users = pgTable("users", {
+  id: uuid("id").defaultRandom(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
 });
 
-export const filters = pgTable("filters", {
+const offers = pgTable("offers", {
   id: serial("id").primaryKey(),
-  hash: text("hash").notNull().unique(),
-  cityFrom: text("city_from"),
-  cityTo: text("city_to"),
+  transportOfferId: integer("transport_offer_id").notNull().unique(),
+  fromCity: varchar("from_city", { length: 255 }).notNull(),
+  toCity: varchar("to_city", { length: 255 }).notNull(),
 });
 
-export const riders = pgTable("riders", {
+const subscriptions = pgTable("subscriptions", {
   id: serial("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  firstName: text("first_name").notNull(),
+  userId: uuid("user_id").notNull(),
+  fromCity: varchar("from_city", { length: 255 }),
+  toCity: varchar("to_city", { length: 255 }),
 });
 
-export const subscriptions = pgTable("subscriptions", {
+const cities = pgTable("cities", {
   id: serial("id").primaryKey(),
-  hash: text("hash").notNull().unique(),
-  riderEmail: text("rider_email").notNull(),
-  filterHash: text("filter_hash").notNull(),
+  name: varchar("name", { length: 255 }).notNull().unique(),
 });
 
-export const cities = pgTable("cities", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  tracCode: text("trac_code").notNull(),
-  country: text("country").notNull(),
-});
+export { users, offers, subscriptions, cities };

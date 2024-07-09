@@ -61,35 +61,8 @@ export type DbRide = {
   hertzRideId: string;
 };
 
-export type City = {
-  tracCode: string;
-  name: string;
-  country: string;
-};
-
 export type TransportDataWithSubscribers = TransportData & {
   subscribers: string[];
-};
-export type Offer = {
-  hertzOfferId: string;
-  added: string;
-};
-
-export type Filter = {
-  hash?: string;
-  cityFrom?: string;
-  cityTo?: string;
-};
-
-export type Rider = {
-  email: string;
-  firstName: string;
-};
-
-export type Subscription = {
-  hash?: string;
-  riderEmail: string;
-  filterHash: string;
 };
 
 export type SubscribedRide = {
@@ -97,4 +70,37 @@ export type SubscribedRide = {
   pickupLocationName: string;
   returnLocationName: string;
   routes: Route[];
+};
+
+// User Model
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+};
+
+// Offer Model
+export type Offer = {
+  id: number;
+  transportOfferId: number;
+  fromCity: string;
+  toCity: string;
+  added: string;
+};
+
+// Subscription Model
+export type Subscription = {
+  id: number;
+  userId: string;
+  fromCity: string | null;
+  toCity: string | null;
+};
+
+export type SubscriptionWithUser = Subscription & User;
+
+// City Model
+export type City = {
+  id: number;
+  name: string;
 };

@@ -1,67 +1,56 @@
 import { getPickupCity, getReturnCity } from "./ride.util";
-import { getFilters, getSubscriptions } from "../db/actions";
-import { Filter, Subscription, TransportData } from "../models";
+import { getSubscriptionsWithEmail } from "../db/actions";
+import { Subscription, SubscriptionWithUser, TransportData } from "../models";
 
 export const getOffersToAlert = async (rides: TransportData[]) => {
-  const allFilters: Filter[] = await getFilters();
-  const allSubscriptions: Subscription[] = await getSubscriptions();
-  const subscribedFilters = getSubscribedFilters(allFilters, allSubscriptions);
+  const allSubscriptionsPromise = await getSubscriptionsWithEmail();
+  const rows = allSubscriptionsPromise.rows as SubscriptionWithUser[];
+  const allSubscriptions = rows;
+  //console.log({ allSubscriptions });
 
   return (
     rides
       // Retrieve the rides caught in a subscribed filter.
       .filter((ride) =>
-        subscribedFilters.some((filter) => isMatchingAnyCity(ride, filter))
+        allSubscriptions.some((sub) => isMatchingAnyCity(ride, sub))
       )
       .map((ride) => {
         //  that has a filter hit.
-        const subscriptionsWithFilterHit = getSubsWithFilterHit(
-          ride,
-          subscribedFilters,
-          allSubscriptions
-        );
+        console.log("Map", ride.pickupLocationName);
 
+        const subscriptionsWithHit = [];
         return {
           ...ride,
-          recipients: getRecipients(subscriptionsWithFilterHit),
+          recipients: getRecipients(subscriptionsWithHit),
         };
       })
       .filter((offer) => !!offer)
   );
 };
 
-const getSubscribedFilters = (
-  filters: Filter[],
-  subscriptions: Subscription[]
-) => filters.filter((f) => subscriptions.some((s) => s.filterHash === f.hash));
-
 const getRecipients = (subscriptions: Subscription[]) => {
-  return removeDuplicates(subscriptions.map((sub) => sub.riderEmail));
+  return removeDuplicates(subscriptions.map((sub) => sub.userId));
 };
 
-const getSubsWithFilterHit = (
-  ride: TransportData,
-  filters: Filter[],
-  subscriptions: Subscription[]
-) => {
-  // For each subscription, check if it has any matching filter hash is stored.
-  return subscriptions.filter(
-    ({ filterHash }) =>
-      !!filters.filter(
-        (f) => f.hash === filterHash && !!isMatchingAnyCity(ride, f)
-      ).length
-  );
-};
+const isMatchingAnyCity = (ride: TransportData, subscription: Subscription) => {
+  const { fromCity, toCity } = subscription;
+  /*   console.log({
+    fromCity,
+    toCity,
+    ridePickup: getPickupCity(ride),
+    rideReturn: getReturnCity(ride),
+  }); */
 
-const isMatchingAnyCity = (ride: TransportData, filter: Filter) => {
-  const { cityFrom, cityTo } = filter;
   switch (true) {
-    case !!cityFrom && !!cityTo:
-      return cityFrom === getPickupCity(ride) && cityTo === getReturnCity(ride);
-    case !!cityFrom:
-      return cityFrom === getPickupCity(ride);
-    case !!cityTo:
-      return cityFrom === getReturnCity(ride);
+    case !!fromCity && !!toCity:
+      return (
+        fromCity === getPickupCity(ride).toUpperCase() &&
+        toCity === getReturnCity(ride).toUpperCase()
+      );
+    case !!fromCity:
+      return fromCity === getPickupCity(ride).toUpperCase();
+    case !!toCity:
+      return fromCity === getReturnCity(ride).toUpperCase();
     default:
       return false;
   }
